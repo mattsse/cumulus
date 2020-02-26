@@ -18,6 +18,9 @@
 
 use crate::WitnessData;
 use frame_executive::ExecuteBlock;
+
+use sp_core::storage::well_known_keys;
+
 use sp_runtime::traits::{Block as BlockT, HasherFor, Header as HeaderT};
 
 use sp_trie::{delta_trie_root, read_trie_value, Layout, MemoryDB};
@@ -219,6 +222,9 @@ fn host_storage_read(key: &[u8], value_out: &mut [u8], value_offset: u32) -> Opt
 }
 
 fn host_storage_set(key: &[u8], value: &[u8]) {
+	if key == well_known_keys::CODE {
+		panic!("It is illegal to upgrade CODE except via `upgrade_validation_function`");
+	}
 	storage().insert(key, value);
 }
 
