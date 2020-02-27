@@ -26,7 +26,8 @@ use polkadot_primitives::parachain::CollatorPair;
 
 use cumulus_collator::CollatorBuilder;
 
-use futures::FutureExt;
+use futures::{future, task::Spawn, FutureExt, StreamExt, TryFutureExt};
+use sc_client::BlockchainEvents;
 
 pub use sc_executor::NativeExecutor;
 
@@ -94,6 +95,15 @@ pub fn run_collator<E: sc_service::ChainSpecExtension>(
 		let service = builder
 			.with_network_protocol(|_| Ok(NodeProtocol::new()))?
 			.build()?;
+
+		let network = service.network();
+		let mut imported_blocks_stream = service.client().import_notification_stream().fuse();
+		parachain_config.task_executor.as_ref().expect("task executor is set")(Box::pin(async {
+			while let Some(notification) = imported_blocks_stream.next().await {
+				//network.on_block_imported(notification.header, Vec::new(), notification.is_new_best);
+				network.announce_block(notification.header, Vec::new());
+			}
+		}));
 
 		let proposer_factory = sc_basic_authorship::ProposerFactory {
 			client: service.client(),
