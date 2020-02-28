@@ -33,7 +33,9 @@ use trie_db::{Trie, TrieDB};
 
 use parachain::{ValidationParams, ValidationResult};
 
-use codec::{Decode, Encode};
+use codec::{Decode, DecodeAll, Encode};
+
+pub const UPGRADE_BLOCK_KEY: &'static [u8] = b":upgrade_block";
 
 /// Stores the global [`Storage`] instance.
 ///
@@ -101,7 +103,8 @@ pub fn validate_block<B: BlockT, E: ExecuteBlock<B>>(params: ValidationParams) -
 		(
 			// Replace storage calls with our own implementations
 			sp_io::storage::host_read.replace_implementation(host_storage_read),
-			sp_io::storage::host_set.replace_implementation(host_storage_set),
+			sp_io::storage::host_set
+				.replace_implementation(make_host_storage_set(block.header().number())),
 			sp_io::storage::host_get.replace_implementation(host_storage_get),
 			sp_io::storage::host_exists.replace_implementation(host_storage_exists),
 			sp_io::storage::host_clear.replace_implementation(host_storage_clear),
@@ -221,11 +224,23 @@ fn host_storage_read(key: &[u8], value_out: &mut [u8], value_offset: u32) -> Opt
 	}
 }
 
-fn host_storage_set(key: &[u8], value: &[u8]) {
-	if key == well_known_keys::CODE {
-		panic!("It is illegal to upgrade CODE except via `upgrade_validation_function`");
+fn make_host_storage_set<B: BlockT>(
+	current_block: <<B as BlockT>::Header as HeaderT>::Number,
+) -> impl Fn(&[u8], &[u8]) + 'static {
+	move |key: &[u8], value: &[u8]| {
+		if key == well_known_keys::CODE {
+			let upgrade_block_data: Vec<u8> = storage()
+				.get(UPGRADE_BLOCK_KEY)
+				.expect("UPGRADE_BLOCK_KEY must be set to legally update the validation function");
+			let upgrade_block =
+				<<B as BlockT>::Header as HeaderT>::Number::decode_all(&upgrade_block_data)
+					.expect("UPGRADE_BLOCK_KEY must decode to a valid BlockT::HeaderT::Number");
+			if upgrade_block > current_block {
+				panic!("It is illegal to upgrade CODE except via `upgrade_validation_function`");
+			}
+		}
+		storage().insert(key, value);
 	}
-	storage().insert(key, value);
 }
 
 fn host_storage_get(key: &[u8]) -> Option<Vec<u8>> {
