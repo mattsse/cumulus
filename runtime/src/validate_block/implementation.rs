@@ -33,9 +33,7 @@ use trie_db::{Trie, TrieDB};
 
 use parachain::{ValidationParams, ValidationResult};
 
-use codec::{Decode, DecodeAll, Encode};
-
-pub const UPGRADE_BLOCK_KEY: &'static [u8] = b":upgrade_block";
+use codec::{Decode, Encode};
 
 /// Stores the global [`Storage`] instance.
 ///
@@ -224,19 +222,31 @@ fn host_storage_read(key: &[u8], value_out: &mut [u8], value_offset: u32) -> Opt
 	}
 }
 
-fn make_host_storage_set<B: BlockT>(
-	current_block: <<B as BlockT>::Header as HeaderT>::Number,
-) -> impl Fn(&[u8], &[u8]) + 'static {
+type Number<B> = <<B as BlockT>::Header as HeaderT>::Number;
+
+// TODO! There needs to exist some way for the parachain to get the block number
+// past which upgrades are legal. However, we haven't yet worked out any of the
+// details of how exactly that will happen. For the meantime, let's just stub
+// it out.
+fn get_upgrade_block<B: BlockT>() -> Option<Number<B>> {
+	unimplemented!()
+}
+
+fn make_host_storage_set<B: BlockT>(current_block: Number<B>) -> impl Fn(&[u8], &[u8]) + 'static {
 	move |key: &[u8], value: &[u8]| {
 		if key == well_known_keys::CODE {
-			let upgrade_block_data: Vec<u8> = storage()
-				.get(UPGRADE_BLOCK_KEY)
-				.expect("UPGRADE_BLOCK_KEY must be set to legally update the validation function");
-			let upgrade_block =
-				<<B as BlockT>::Header as HeaderT>::Number::decode_all(&upgrade_block_data)
-					.expect("UPGRADE_BLOCK_KEY must decode to a valid BlockT::HeaderT::Number");
-			if upgrade_block > current_block {
-				panic!("It is illegal to upgrade CODE except via `upgrade_validation_function`");
+			match get_upgrade_block::<B>() {
+				None => {
+					panic!("It is illegal to upgrade CODE except via `upgrade_validation_function`")
+				}
+				Some(upgrade_block) => {
+					if upgrade_block > current_block {
+						panic!(
+							"The validation function may not be upgaded until {:?}; currently {:?}",
+							upgrade_block, current_block
+						);
+					}
+				}
 			}
 		}
 		storage().insert(key, value);
