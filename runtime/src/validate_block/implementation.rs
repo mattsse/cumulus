@@ -33,7 +33,9 @@ use trie_db::{Trie, TrieDB};
 
 use parachain::{ValidationParams, ValidationResult};
 
-use codec::{Decode, Encode};
+use codec::{Decode, DecodeAll, Encode};
+
+const CURRENT_BLOCK_KEY: &'static [u8] = b":current_block";
 
 /// Stores the global [`Storage`] instance.
 ///
@@ -90,19 +92,23 @@ pub fn validate_block<B: BlockT, E: ExecuteBlock<B>>(params: ValidationParams) -
 		"Invalid parent hash"
 	);
 
-	let storage = WitnessStorage::<B>::new(
-		block_data.witness_data,
-		block_data.witness_data_storage_root,
-	)
-	.expect("Witness data and storage root always match; qed");
+	{
+		let storage = WitnessStorage::<B>::new(
+			block_data.witness_data,
+			block_data.witness_data_storage_root,
+		)
+		.expect("Witness data and storage root always match; qed");
+
+		unsafe { STORAGE = Some(Box::new(storage)) };
+	}
+
+	storage().insert(CURRENT_BLOCK_KEY, &block.header().number().encode());
 
 	let _guard = unsafe {
-		STORAGE = Some(Box::new(storage));
 		(
 			// Replace storage calls with our own implementations
 			sp_io::storage::host_read.replace_implementation(host_storage_read),
-			sp_io::storage::host_set
-				.replace_implementation(make_host_storage_set(block.header().number())),
+			sp_io::storage::host_set.replace_implementation(host_storage_set::<B>),
 			sp_io::storage::host_get.replace_implementation(host_storage_get),
 			sp_io::storage::host_exists.replace_implementation(host_storage_exists),
 			sp_io::storage::host_clear.replace_implementation(host_storage_clear),
@@ -176,7 +182,8 @@ impl<B: BlockT> Storage for WitnessStorage<B> {
 			&mut self.witness_data,
 			self.storage_root.clone(),
 			self.overlay.drain(),
-		).expect("Calculates storage root");
+		)
+		.expect("Calculates storage root");
 
 		root.encode()
 	}
@@ -232,25 +239,28 @@ fn get_upgrade_block<B: BlockT>() -> Option<Number<B>> {
 	unimplemented!()
 }
 
-fn make_host_storage_set<B: BlockT>(current_block: Number<B>) -> impl Fn(&[u8], &[u8]) + 'static {
-	move |key: &[u8], value: &[u8]| {
-		if key == well_known_keys::CODE {
-			match get_upgrade_block::<B>() {
-				None => {
-					panic!("It is illegal to upgrade CODE except via `upgrade_validation_function`")
-				}
-				Some(upgrade_block) => {
-					if upgrade_block > current_block {
-						panic!(
-							"The validation function may not be upgaded until {:?}; currently {:?}",
-							upgrade_block, current_block
-						);
-					}
+fn host_storage_set<B: BlockT>(key: &[u8], value: &[u8]) {
+	if key == well_known_keys::CODE {
+		match get_upgrade_block::<B>() {
+			None => {
+				panic!("It is illegal to upgrade CODE except via `upgrade_validation_function`")
+			}
+			Some(upgrade_block) => {
+				let current_block = Number::<B>::decode_all(
+					&storage()
+						.get(CURRENT_BLOCK_KEY)
+						.expect("this value is inserted every block"),
+				).expect("we encode it fresh every block");
+				if upgrade_block > current_block {
+					panic!(
+						"The validation function may not be upgaded until {:?}; currently {:?}",
+						upgrade_block, current_block
+					);
 				}
 			}
 		}
-		storage().insert(key, value);
 	}
+	storage().insert(key, value);
 }
 
 fn host_storage_get(key: &[u8]) -> Option<Vec<u8>> {
