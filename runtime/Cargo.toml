@@ -22,6 +22,7 @@ sp-trie = { git = "https://github.com/paritytech/substrate", default-features = 
 
 # Polkadot dependencies
 parachain = { package = "polkadot-parachain", git = "https://github.com/paritytech/polkadot", branch = "cumulus-branch", default-features = false, features = [ "wasm-api" ] }
+polkadot-primitives = { package = "polkadot-primitives", git = "https://github.com/paritytech/polkadot", branch = "cumulus-branch", default-features = false}
 
 [dev-dependencies]
 sp-keyring = { git = "https://github.com/paritytech/substrate", branch = "cumulus-branch" }

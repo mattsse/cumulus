@@ -58,16 +58,18 @@ macro_rules! register_validate_block_impl {
 		#[doc(hidden)]
 		mod parachain_validate_block {
 			use super::*;
+			#[cfg(not(feature = "std"))]
+			use polkadot_primitives::BlockNumber as RelayNumber;
 
 			#[no_mangle]
-			unsafe fn validate_block(arguments: *const u8, arguments_len: usize) -> u64 {
+			unsafe fn validate_block(arguments: *const u8, arguments_len: usize, current_block: RelayNumber) -> u64 {
 				let params =
 					$crate::validate_block::parachain::load_params(arguments, arguments_len);
 
 				let res = $crate::validate_block::implementation::validate_block::<
 					$block,
 					$block_executor,
-				>(params);
+				>(params, current_block);
 
 				$crate::validate_block::parachain::write_result(&res)
 			}

@@ -33,9 +33,9 @@ use trie_db::{Trie, TrieDB};
 
 use parachain::{ValidationParams, ValidationResult};
 
-use codec::{Decode, Encode};
+use polkadot_primitives::BlockNumber as RelayNumber;
 
-const CURRENT_BLOCK_KEY: &'static [u8] = b":current_block";
+use codec::{Decode, Encode};
 
 /// Stores the global [`Storage`] instance.
 ///
@@ -77,7 +77,7 @@ trait Storage {
 
 /// Validate a given parachain block on a validator.
 #[doc(hidden)]
-pub fn validate_block<B: BlockT, E: ExecuteBlock<B>>(params: ValidationParams) -> ValidationResult {
+pub fn validate_block<B: BlockT, E: ExecuteBlock<B>>(params: ValidationParams, current_block: RelayNumber) -> ValidationResult {
 	let block_data = crate::ParachainBlockData::<B>::decode(&mut &params.block_data[..])
 		.expect("Invalid parachain block data");
 
@@ -95,7 +95,7 @@ pub fn validate_block<B: BlockT, E: ExecuteBlock<B>>(params: ValidationParams) -
 	let storage = WitnessState::<B>::new(
 		block_data.witness_data,
 		block_data.witness_data_storage_root,
-		*block.header().number(),
+		current_block,
 	)
 	.expect("Witness data and storage root always match; qed");
 
@@ -126,7 +126,7 @@ struct WitnessState<B: BlockT> {
 	witness_data: MemoryDB<HasherFor<B>>,
 	overlay: hashbrown::HashMap<Vec<u8>, Option<Vec<u8>>>,
 	storage_root: B::Hash,
-	current_block: Number<B>,
+	current_block: RelayNumber,
 }
 
 impl<B: BlockT> WitnessState<B> {
@@ -136,7 +136,7 @@ impl<B: BlockT> WitnessState<B> {
 	fn new(
 		data: WitnessData,
 		storage_root: B::Hash,
-		current_block: Number<B>,
+		current_block: RelayNumber,
 	) -> Result<Self, &'static str> {
 		let mut db = MemoryDB::default();
 		data.into_iter().for_each(|i| {
@@ -248,13 +248,11 @@ fn host_storage_read(key: &[u8], value_out: &mut [u8], value_offset: u32) -> Opt
 	}
 }
 
-type Number<B> = <<B as BlockT>::Header as HeaderT>::Number;
-
 // TODO! There needs to exist some way for the parachain to get the block number
 // past which upgrades are legal. However, we haven't yet worked out any of the
 // details of how exactly that will happen. For the meantime, let's just stub
 // it out.
-fn get_upgrade_block<B: BlockT>() -> Option<Number<B>> {
+fn get_upgrade_block<B: BlockT>() -> Option<RelayNumber> {
 	unimplemented!()
 }
 
