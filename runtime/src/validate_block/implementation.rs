@@ -33,7 +33,7 @@ use trie_db::{Trie, TrieDB};
 
 use parachain::{ValidationParams, ValidationResult};
 
-use codec::{Decode, DecodeAll, Encode};
+use codec::{Decode, Encode};
 
 const CURRENT_BLOCK_KEY: &'static [u8] = b":current_block";
 
@@ -92,23 +92,20 @@ pub fn validate_block<B: BlockT, E: ExecuteBlock<B>>(params: ValidationParams) -
 		"Invalid parent hash"
 	);
 
-	{
-		let storage = WitnessStorage::<B>::new(
-			block_data.witness_data,
-			block_data.witness_data_storage_root,
-		)
-		.expect("Witness data and storage root always match; qed");
-
-		unsafe { STORAGE = Some(Box::new(storage)) };
-	}
-
-	storage().insert(CURRENT_BLOCK_KEY, &block.header().number().encode());
+	let storage = WitnessState::<B>::new(
+		block_data.witness_data,
+		block_data.witness_data_storage_root,
+		*block.header().number(),
+	)
+	.expect("Witness data and storage root always match; qed");
 
 	let _guard = unsafe {
+		STORAGE = Some(Box::new(storage));
+
 		(
 			// Replace storage calls with our own implementations
 			sp_io::storage::host_read.replace_implementation(host_storage_read),
-			sp_io::storage::host_set.replace_implementation(host_storage_set::<B>),
+			sp_io::storage::host_set.replace_implementation(host_storage_set),
 			sp_io::storage::host_get.replace_implementation(host_storage_get),
 			sp_io::storage::host_exists.replace_implementation(host_storage_exists),
 			sp_io::storage::host_clear.replace_implementation(host_storage_clear),
@@ -125,17 +122,22 @@ pub fn validate_block<B: BlockT, E: ExecuteBlock<B>>(params: ValidationParams) -
 
 /// The storage implementation used when validating a block that is using the
 /// witness data as source.
-struct WitnessStorage<B: BlockT> {
+struct WitnessState<B: BlockT> {
 	witness_data: MemoryDB<HasherFor<B>>,
 	overlay: hashbrown::HashMap<Vec<u8>, Option<Vec<u8>>>,
 	storage_root: B::Hash,
+	current_block: Number<B>,
 }
 
-impl<B: BlockT> WitnessStorage<B> {
+impl<B: BlockT> WitnessState<B> {
 	/// Initialize from the given witness data and storage root.
 	///
 	/// Returns an error if given storage root was not found in the witness data.
-	fn new(data: WitnessData, storage_root: B::Hash) -> Result<Self, &'static str> {
+	fn new(
+		data: WitnessData,
+		storage_root: B::Hash,
+		current_block: Number<B>,
+	) -> Result<Self, &'static str> {
 		let mut db = MemoryDB::default();
 		data.into_iter().for_each(|i| {
 			db.insert(EMPTY_PREFIX, &i);
@@ -149,11 +151,12 @@ impl<B: BlockT> WitnessStorage<B> {
 			witness_data: db,
 			overlay: Default::default(),
 			storage_root,
+			current_block,
 		})
 	}
 }
 
-impl<B: BlockT> Storage for WitnessStorage<B> {
+impl<B: BlockT> Storage for WitnessState<B> {
 	fn get(&self, key: &[u8]) -> Option<Vec<u8>> {
 		self.overlay
 			.get(key)
@@ -170,6 +173,22 @@ impl<B: BlockT> Storage for WitnessStorage<B> {
 	}
 
 	fn insert(&mut self, key: &[u8], value: &[u8]) {
+		if key == well_known_keys::CODE {
+			match get_upgrade_block::<B>() {
+				None => {
+					panic!("It is illegal to upgrade CODE except via `upgrade_validation_function`")
+				}
+				Some(upgrade_block) => {
+					if upgrade_block > self.current_block {
+						panic!(
+							"The validation function may not be upgaded until {:?}; currently {:?}",
+							upgrade_block, self.current_block
+						);
+					}
+				}
+			}
+		}
+
 		self.overlay.insert(key.to_vec(), Some(value.to_vec()));
 	}
 
@@ -239,27 +258,7 @@ fn get_upgrade_block<B: BlockT>() -> Option<Number<B>> {
 	unimplemented!()
 }
 
-fn host_storage_set<B: BlockT>(key: &[u8], value: &[u8]) {
-	if key == well_known_keys::CODE {
-		match get_upgrade_block::<B>() {
-			None => {
-				panic!("It is illegal to upgrade CODE except via `upgrade_validation_function`")
-			}
-			Some(upgrade_block) => {
-				let current_block = Number::<B>::decode_all(
-					&storage()
-						.get(CURRENT_BLOCK_KEY)
-						.expect("this value is inserted every block"),
-				).expect("we encode it fresh every block");
-				if upgrade_block > current_block {
-					panic!(
-						"The validation function may not be upgaded until {:?}; currently {:?}",
-						upgrade_block, current_block
-					);
-				}
-			}
-		}
-	}
+fn host_storage_set(key: &[u8], value: &[u8]) {
 	storage().insert(key, value);
 }
 
