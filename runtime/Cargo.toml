@@ -13,21 +13,21 @@ trie-db = { version = "0.20.0", default-features = false }
 hashbrown = "0.6.1"
 
 # Substrate dependencies
-sp-std = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-io = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
-frame-executive = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-trie = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
+sp-std = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
+sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
+sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
+sp-io = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
+frame-executive = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
+sp-trie = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
 
 # Polkadot dependencies
-parachain = { package = "polkadot-parachain", git = "https://github.com/paritytech/polkadot", branch = "bkchr-cumulus-branch-dev", default-features = false, features = [ "wasm-api" ] }
+parachain = { package = "polkadot-parachain", git = "https://github.com/paritytech/polkadot", branch = "cecton-keep-unpinned-para-blocks", default-features = false, features = [ "wasm-api" ] }
 
 [dev-dependencies]
-sp-keyring = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sc-executor = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-consensus = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
+sp-keyring = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sc-executor = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-consensus = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
 test-client = { package = "cumulus-test-client", path = "../test/client" }
 
 [features]

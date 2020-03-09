@@ -6,20 +6,20 @@ edition = "2018"
 
 [dependencies]
 # Substrate dependencies
-sp-runtime = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-core = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-consensus = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-inherents = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-api = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sc-client = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sc-client-api = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sc-service = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sc-cli = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
+sp-runtime = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-core = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-consensus = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-inherents = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-api = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sc-client = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sc-client-api = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sc-service = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sc-cli = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
 
 # Polkadot dependencies
-polkadot-collator = { git = "https://github.com/paritytech/polkadot", branch = "bkchr-cumulus-branch-dev" }
-polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "bkchr-cumulus-branch-dev" }
-polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "bkchr-cumulus-branch-dev" }
+polkadot-collator = { git = "https://github.com/paritytech/polkadot", branch = "cecton-keep-unpinned-para-blocks" }
+polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "cecton-keep-unpinned-para-blocks" }
+polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "cecton-keep-unpinned-para-blocks" }
 
 # Cumulus dependencies
 cumulus-consensus = { path = "../consensus" }
@@ -37,13 +37,13 @@ test-runtime = { package = "cumulus-test-runtime", path = "../test/runtime" }
 test-client = { package = "cumulus-test-client", path = "../test/client" }
 
 # Substrate dependencies
-substrate-test-client = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-keyring = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-state-machine = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
+substrate-test-client = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-keyring = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-state-machine = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
 
 # Polkadot dependencies
-polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "bkchr-cumulus-branch-dev" }
+polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "cecton-keep-unpinned-para-blocks" }
 
 # Other dependencies
 env_logger = "0.7.1"

@@ -7,19 +7,19 @@ edition = "2018"
 
 [dependencies]
 # substrate deps
-sc-client = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sc-client-api = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-consensus = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-core = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-inherents = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-runtime = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-block-builder = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
-sp-api = { git = "https://github.com/paritytech/substrate", branch = "bkchr-cumulus-branch-dev" }
+sc-client = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sc-client-api = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-consensus = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-core = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-inherents = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-runtime = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-block-builder = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
+sp-api = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
 
 # polkadot deps
-polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "bkchr-cumulus-branch-dev" }
-polkadot-runtime = { git = "https://github.com/paritytech/polkadot", branch = "bkchr-cumulus-branch-dev" }
+polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "cecton-keep-unpinned-para-blocks" }
+polkadot-runtime = { git = "https://github.com/paritytech/polkadot", branch = "cecton-keep-unpinned-para-blocks" }
 
 # other deps
 futures = { version = "0.3.1", features = ["compat"] }

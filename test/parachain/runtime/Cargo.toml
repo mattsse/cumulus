@@ -9,27 +9,27 @@ serde = { version = "1.0.101", optional = true, features = ["derive"] }
 codec = { package = "parity-scale-codec", version = "1.0.6", default-features = false, features = ["derive"] }
 
 # Substrate dependencies
-sp-std = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-api = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-io = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-version = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-runtime = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-core = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-session = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-offchain = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-block-builder = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-transaction-pool = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
-sp-inherents = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
+sp-std = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+sp-api = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+sp-io = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+sp-version = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+sp-runtime = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+sp-core = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+sp-session = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
+sp-offchain = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
+sp-block-builder = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
+sp-transaction-pool = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
+sp-inherents = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
 
-frame-support = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-frame-executive = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-frame-system = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-pallet-balances = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-pallet-indices = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-pallet-randomness-collective-flip = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-pallet-timestamp = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-pallet-sudo = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "bkchr-cumulus-branch-dev" }
-pallet-transaction-payment = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "bkchr-cumulus-branch-dev" }
+frame-support = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+frame-executive = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+frame-system = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+pallet-balances = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+pallet-indices = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+pallet-randomness-collective-flip = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+pallet-timestamp = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+pallet-sudo = { git = "https://github.com/paritytech/substrate", default_features = false, branch = "cecton-disable-default-announce" }
+pallet-transaction-payment = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
 
 # Cumulus dependencies
 cumulus-runtime = { path = "../../../runtime", default-features = false }
