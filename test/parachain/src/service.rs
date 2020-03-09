@@ -84,9 +84,11 @@ pub fn run_collator<E: sc_service::ChainSpecExtension>(
 	key: Arc<CollatorPair>,
 	mut polkadot_config: polkadot_collator::Configuration,
 ) -> sc_cli::error::Result<()> {
-	sc_cli::run_service_until_exit(parachain_config, move |parachain_config| {
+	sc_cli::run_service_until_exit(parachain_config, move |mut parachain_config| {
 		let task_executor = parachain_config.task_executor.clone();
 		polkadot_config.task_executor = task_executor.clone();
+
+		parachain_config.default_announce_block = false;
 
 		let (builder, inherent_data_providers) = new_full_start!(parachain_config);
 		inherent_data_providers
@@ -102,9 +104,13 @@ pub fn run_collator<E: sc_service::ChainSpecExtension>(
 		task_executor.as_ref()
 			.expect("task executor is set")(
 				Box::pin(async move {
+					println!("0");
 					while let Some(notification) = imported_blocks_stream.next().await {
+						println!("1");
 						network.on_block_imported(notification.hash, notification.header, Vec::new(), notification.is_new_best);
+						println!("2");
 					}
+					println!("3");
 				})
 			);
 
