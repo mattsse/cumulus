@@ -24,6 +24,7 @@ sp-trie = { git = "https://github.com/paritytech/substrate", default-features = 
 parachain = { package = "polkadot-parachain", git = "https://github.com/paritytech/polkadot", branch = "cecton-keep-unpinned-para-blocks", default-features = false, features = [ "wasm-api" ] }
 
 [dev-dependencies]
+sc-block-builder = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "cecton-disable-default-announce" }
 sp-keyring = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
 sp-blockchain = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
 sc-executor = { git = "https://github.com/paritytech/substrate", branch = "cecton-disable-default-announce" }
