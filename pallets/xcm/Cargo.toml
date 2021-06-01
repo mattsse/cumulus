@@ -13,7 +13,7 @@ sp-runtime = { git = "https://github.com/paritytech/substrate", default-features
 frame-support = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
 frame-system = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
 
-xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
+xcm = { git = "https://github.com/mattsse/polkadot", default-features = false, branch = "rococo-v1" }
 
 cumulus-primitives-core = { path = "../../primitives/core", default-features = false }
 

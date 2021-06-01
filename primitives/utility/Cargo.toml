@@ -12,21 +12,22 @@ sp-trie = { git = "https://github.com/paritytech/substrate", default-features = 
 frame-support = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
 
 # Polkadot dependencies
-polkadot-parachain = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
-polkadot-primitives = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
-polkadot-core-primitives = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
-xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
+polkadot-parachain = { git = "https://github.com/mattsse/polkadot", default-features = false, branch = "rococo-v1" }
+polkadot-primitives = { git = "https://github.com/mattsse/polkadot", default-features = false, branch = "rococo-v1" }
+polkadot-core-primitives = { git = "https://github.com/mattsse/polkadot", default-features = false, branch = "rococo-v1" }
+xcm = { git = "https://github.com/mattsse/polkadot", default-features = false, branch = "rococo-v1" }
 
 cumulus-primitives-core = { path = "../core", default-features = false }
 
 # Other dependencies
 impl-trait-for-tuples = "0.2.1"
 codec = { package = "parity-scale-codec", version = "2.0.0", default-features = false, features = [ "derive" ] }
-
+log = { version = "0.4.14", default-features = false }
 
 [features]
 default = [ "std" ]
 std = [
+	"log/std",
 	"codec/std",
 	"sp-std/std",
 	"polkadot-primitives/std",

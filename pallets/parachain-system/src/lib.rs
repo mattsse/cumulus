@@ -727,6 +727,7 @@ impl MessageQueueChain {
 
 impl<T: Config> Module<T> {
 	pub fn send_upward_message(message: UpwardMessage) -> Result<u32, MessageSendError> {
+		log::warn!(target: "pint_xcm", "send_upward_message called {:?} ",message);
 		// Check if the message fits into the relay-chain constraints.
 		//
 		// Note, that we are using `host_configuration` here which may be from the previous
@@ -758,6 +759,7 @@ impl<T: Config> Module<T> {
 			}
 		};
 		<Self as Store>::PendingUpwardMessages::append(message);
+		log::warn!(target: "pint_xcm", "send_upward_message PendingUpwardMessages appended");
 		Ok(0)
 	}
 }

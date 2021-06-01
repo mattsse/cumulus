@@ -35,6 +35,7 @@ use frame_support::{traits::Get, dispatch::Weight};
 pub struct ParentAsUmp<T>(PhantomData<T>);
 impl<T: UpwardMessageSender> SendXcm for ParentAsUmp<T> {
 	fn send_xcm(dest: MultiLocation, msg: Xcm<()>) -> Result<(), XcmError> {
+		log::warn!(target: "pint_xcm", "send_xcm called");
 		match &dest {
 			// An upward message for the relay chain.
 			MultiLocation::X1(Junction::Parent) => {
@@ -42,6 +43,9 @@ impl<T: UpwardMessageSender> SendXcm for ParentAsUmp<T> {
 
 				T::send_upward_message(data)
 					.map_err(|e| XcmError::SendFailed(e.into()))?;
+
+
+				log::warn!(target: "pint_xcm", "send_xcm send_upward_message successfully");
 
 				Ok(())
 			}

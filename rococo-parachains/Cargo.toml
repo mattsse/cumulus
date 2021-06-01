@@ -65,10 +65,10 @@ cumulus-client-network = { path = "../client/network" }
 cumulus-primitives-core = { path = "../primitives/core" }
 
 # Polkadot dependencies
-polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "rococo-v1" }
-polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "rococo-v1" }
-polkadot-cli = { git = "https://github.com/paritytech/polkadot", branch = "rococo-v1" }
-polkadot-parachain = { git = "https://github.com/paritytech/polkadot", branch = "rococo-v1" }
+polkadot-primitives = { git = "https://github.com/mattsse/polkadot", branch = "rococo-v1" }
+polkadot-service = { git = "https://github.com/mattsse/polkadot", branch = "rococo-v1" }
+polkadot-cli = { git = "https://github.com/mattsse/polkadot", branch = "rococo-v1" }
+polkadot-parachain = { git = "https://github.com/mattsse/polkadot", branch = "rococo-v1" }
 
 [build-dependencies]
 substrate-build-script-utils = { git = "https://github.com/paritytech/substrate", branch = "rococo-v1" }
@@ -81,10 +81,10 @@ tempfile = "3.2.0"
 tokio = { version = "0.2.13", features = ["macros"] }
 
 # Polkadot dependencies
-polkadot-runtime-common = { git = "https://github.com/paritytech/polkadot", branch = "rococo-v1" }
-polkadot-test-runtime = { git = "https://github.com/paritytech/polkadot", branch = "rococo-v1" }
-polkadot-test-client = { git = "https://github.com/paritytech/polkadot", branch = "rococo-v1" }
-polkadot-test-service = { git = "https://github.com/paritytech/polkadot", branch = "rococo-v1" }
+polkadot-runtime-common = { git = "https://github.com/mattsse/polkadot", branch = "rococo-v1" }
+polkadot-test-runtime = { git = "https://github.com/mattsse/polkadot", branch = "rococo-v1" }
+polkadot-test-client = { git = "https://github.com/mattsse/polkadot", branch = "rococo-v1" }
+polkadot-test-service = { git = "https://github.com/mattsse/polkadot", branch = "rococo-v1" }
 
 # Substrate dependencies
 pallet-sudo = { git = "https://github.com/paritytech/substrate", branch = "rococo-v1" }

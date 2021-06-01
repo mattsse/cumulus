@@ -11,7 +11,7 @@ cumulus-primitives = { path = "../primitives", default-features = false }
 cumulus-runtime = { path = "../runtime", default-features = false }
 
 # Polkadot dependencies
-parachain = { package = "polkadot-parachain", git = "https://github.com/paritytech/polkadot", default-features = false, branch = "rococo-v1" }
+parachain = { package = "polkadot-parachain", git = "https://github.com/mattsse/polkadot", default-features = false, branch = "rococo-v1" }
 
 # Substrate dependencies
 frame-support = { git = "https://github.com/paritytech/substrate", default-features = false, branch = "rococo-v1" }
